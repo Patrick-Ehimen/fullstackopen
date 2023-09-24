@@ -1,8 +1,3 @@
-// import { useState } from "react";
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "/vite.svg";
-// import "./App.css";
-
 const Header = (props) => {
   return (
     <div>
@@ -13,31 +8,18 @@ const Header = (props) => {
 
 const Part = (props) => {
   return (
-    <div>
-      <p>
-        {props.part1}
-        {props.exercises1}
-      </p>
-    </div>
+    <p>
+      {props.part} {props.exercises}
+    </p>
   );
 };
 
 const Content = (props) => {
   return (
     <div>
-      {/* <Part part1={part1} exercises1={exercises1} /> */}
-      <p>
-        {props.part1}
-        {props.exercises1}
-      </p>
-      <p>
-        {props.part2}
-        {props.exercises2}
-      </p>
-      <p>
-        {props.part2}
-        {props.exercises2}
-      </p>
+      <Part part={props.part1} exercises={props.exercises1} />
+      <Part part={props.part2} exercises={props.exercises2} />
+      <Part part={props.part3} exercises={props.exercises3} />
     </div>
   );
 };
@@ -45,7 +27,7 @@ const Content = (props) => {
 const Total = (props) => {
   return (
     <div>
-      <p>Number of exercises {props.total} </p>
+      <p>Number of exercises {props.totalNum} </p>
     </div>
   );
 };
@@ -62,13 +44,12 @@ const App = () => {
   return (
     <div>
       <Header course={course} />
-      {/* <Content /> */}
 
       <Content part1={part1} exercises1={exercises1} />
-      <Content part1={part2} exercises1={exercises2} />
-      <Content part1={part3} exercises1={exercises3} />
+      <Content part2={part2} exercises2={exercises2} />
+      <Content part3={part3} exercises3={exercises3} />
 
-      <Total total={exercises1 + exercises2 + exercises3} />
+      <Total totalNum={exercises1 + exercises2 + exercises3} />
     </div>
   );
 };
