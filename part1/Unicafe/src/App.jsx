@@ -1,67 +1,43 @@
-const Header = (props) => {
-  return (
-    <div>
-      <h1>{props.course}</h1>
-    </div>
-  );
-};
+import { useState } from "react";
 
-const Part = (props) => {
-  return (
-    <p>
-      {props.parts} {props.exercises}
-    </p>
-  );
-};
+const Dispaly = (props) => <div>{props.heading}</div>;
 
-const Content = (props) => {
-  return (
-    <div>
-      <Part parts={props.parts[0].name} exercises={props.parts[0].exercises} />
-      <Part parts={props.parts[1].name} exercises={props.parts[1].exercises} />
-      <Part parts={props.parts[2].name} exercises={props.parts[2].exercises} />
-    </div>
-  );
-};
-
-const Total = (props) => {
-  console.log(props);
-  return (
-    <div>
-      <p>
-        Number of exercises{" "}
-        {props.parts[0].exercises +
-          props.parts[1].exercises +
-          props.parts[2].exercises}
-      </p>
-    </div>
-  );
+const Button = (props) => {
+  return <button onClick={props.feedback}> {props.text}</button>;
 };
 
 const App = () => {
-  const course = {
-    name: "Half Stack application development",
-    parts: [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-      },
-    ],
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const heading = "give feedback";
+
+  const goodFeedback = () => {
+    setGood(good + 1);
+  };
+
+  const neutralFeedback = () => {
+    setNeutral(neutral + 1);
+  };
+
+  const badFeedback = () => {
+    setBad(bad + 1);
   };
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <h1>
+        <Dispaly heading={heading} />
+      </h1>
+      <Button feedback={goodFeedback} text="good" />
+      <Button feedback={neutralFeedback} text="neutral" />
+      <Button feedback={badFeedback} text="bad" />
+
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
     </div>
   );
 };
