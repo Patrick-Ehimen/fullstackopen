@@ -6,7 +6,34 @@ const Button = (props) => {
   return <button onClick={props.feedback}> {props.text}</button>;
 };
 
-const Statistics = (props) => {};
+const StatisticLine = ({ text, value }) => {
+  return (
+    <p>
+      {text} {value}
+    </p>
+  );
+};
+
+const Statistics = ({ good, neutral, bad, total, average, percentageGood }) => {
+  if (total > 0) {
+    return (
+      <div>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={total} />
+        <StatisticLine text="average" value={average} />
+        <StatisticLine text="positive" value={percentageGood + " %"} />
+      </div>
+    );
+  }
+  return (
+    <div>
+      <h1>Statistics</h1>
+      <p>No feedback given</p>
+    </div>
+  );
+};
 
 const App = () => {
   // save clicks of each button to its own state
@@ -61,13 +88,14 @@ const App = () => {
       <Button feedback={neutralFeedback} text="neutral" />
       <Button feedback={badFeedback} text="bad" />
 
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-
-      <p>all {total} </p>
-      <p>average {average} </p>
-      <p>positive {percentageGood} %</p>
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={total}
+        average={average}
+        percentageGood={percentageGood}
+      />
     </div>
   );
 };
