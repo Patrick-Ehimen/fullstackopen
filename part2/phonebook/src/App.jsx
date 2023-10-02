@@ -53,7 +53,7 @@ const App = () => {
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
       />
-      <h2>Add a new</h2>
+      <h3>Add a new</h3>
       <PersonForm
         newName={newName}
         newNumber={newNumber}
@@ -61,6 +61,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
         addPerson={addPerson}
       />
+      <h3>Numbers</h3>
       <PersonList persons={filteredPersons} />
     </div>
   );
