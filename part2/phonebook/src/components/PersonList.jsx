@@ -1,13 +1,13 @@
 import personService from "../services/personService";
 
-const PersonList = ({ persons }) => {
+const PersonList = ({ persons, setPersons }) => {
   const handleDelete = (id, name) => {
     if (window.confirm(`Do you really want to delete ${name}?`)) {
       personService
         .deletePerson(id)
         .then(() => {
           // Update the local state after successful deletion
-          setns(persons.filter((person) => person.id !== id));
+          setPersons(persons.filter((person) => person.id !== id));
         })
         .catch((error) => {
           console.log(error);
