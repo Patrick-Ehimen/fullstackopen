@@ -73,7 +73,7 @@ const App = () => {
         addPerson={addPerson}
       />
       <h3>Numbers</h3>
-      <PersonList persons={filteredPersons} />
+      <PersonList persons={filteredPersons} setPersons={setPersons} />
     </div>
   );
 };
