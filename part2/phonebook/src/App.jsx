@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import SearchFilter from "./components/SearchFilter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
+import Notification from "./components/Notification";
+
 import personService from "./services/personService";
 
 const App = () => {
@@ -9,14 +11,14 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  // const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPerson) => {
       setPersons(initialPerson);
     });
   }, []);
-
-  console.log("render", persons.length, "persons");
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -53,6 +55,12 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            setErrorMessage(
+              `Number for ${updatedPerson.name} updated successfully.`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           })
           .catch((error) => {
             console.log(error);
@@ -66,6 +74,10 @@ const App = () => {
           setPersons(persons.concat(createdPerson));
           setNewName("");
           setNewNumber("");
+          setErrorMessage(`${createdPerson.name} Added successfully.`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
         })
         .catch((error) => {
           console.log(error);
@@ -80,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <SearchFilter
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
