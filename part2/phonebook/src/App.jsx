@@ -105,7 +105,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
         addPerson={addPerson}
       />
-      <h3>Numbers</h3>
+      <h3 className="filter">Numbers</h3>
       <PersonList persons={filteredPersons} setPersons={setPersons} />
     </div>
   );
