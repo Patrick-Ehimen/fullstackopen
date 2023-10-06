@@ -7,10 +7,10 @@ const PersonForm = ({
 }) => {
   return (
     <form onSubmit={addPerson}>
-      <div>
+      <div className="filter">
         name: <input value={newName} onChange={handleNameChange} />
       </div>
-      <div>
+      <div className="filter">
         number: <input value={newNumber} onChange={handleNumberChange} />
       </div>
       <div>
