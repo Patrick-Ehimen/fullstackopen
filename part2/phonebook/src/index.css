@@ -2,11 +2,13 @@ h2 {
   color: rgb(0, 117, 128);
   font-style: italic;
 }
+
 li {
   color: grey;
   padding-top: 3px;
   font-size: 15px;
 }
+
 .notification {
   color: green;
   background: lightgrey;
@@ -16,6 +18,11 @@ li {
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.notification.deleted {
+  color: red;
+}
+
 .filter {
   color: rgb(0, 117, 128);
 }
