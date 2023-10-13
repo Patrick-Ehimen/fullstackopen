@@ -1,4 +1,5 @@
-const http = require("http");
+const express = require("express");
+const app = express();
 
 let persons = [
   {
@@ -21,11 +22,20 @@ let persons = [
     name: "Mary Poppendieck",
     number: "39-23-6423122",
   },
+  {
+    id: 5,
+    name: "0x Ose",
+    number: "39-23-6423122",
+  },
+  {
+    id: 6,
+    name: "0se Ehimen",
+    number: "39-23-6423122",
+  },
 ];
 
-const app = http.createServer((request, response) => {
-  response.writeHead(200, { "Content-Type": "application/json" });
-  response.end(JSON.stringify(persons));
+app.get("/api/persons", (request, response) => {
+  response.json(persons);
 });
 
 const port = 3001;
