@@ -1,7 +1,19 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
 
 app.use(express.json());
+
+// Define a new token 'body' for logging the request body
+morgan.token("body", function (req, res) {
+  return JSON.stringify(req.body);
+});
+
+// Use morgan middleware with custom format
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
 let persons = [
   {
