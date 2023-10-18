@@ -7,11 +7,17 @@ const PersonList = ({ persons, setPersons }) => {
       personService
         .remove(id)
         .then(() => {
-          // Update the local state after successful deletion
           setPersons(persons.filter((person) => person.id !== id));
+          setSuccessMessage(`Person ${name} deleted successfully.`);
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
         })
         .catch((error) => {
-          console.log(error);
+          setErrorMessage(`Failed to delete ${name}. Please try again.`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
         });
     }
   };
@@ -29,5 +35,4 @@ const PersonList = ({ persons, setPersons }) => {
     </ul>
   );
 };
-
 export default PersonList;
