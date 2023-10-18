@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const SearchFilter = ({ searchTerm, handleSearchChange }) => {
   return (
@@ -44,12 +45,7 @@ const PersonList = ({ persons }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-1234567" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
-    { name: "Dan Abramov", number: "12-43-234345" },
-    { name: "Mary Poppendieck", number: "39-23-6423122" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,6 +62,17 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then((response) => {
+        setPersons(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const addPerson = (event) => {
     event.preventDefault();
     if (
@@ -74,7 +81,14 @@ const App = () => {
       )
     ) {
       const newPerson = { name: newName, number: newNumber };
-      setPersons(persons.concat(newPerson));
+      axios
+        .post("http://localhost:3001/persons", newPerson)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       alert(`${newName} is already added to phonebook`);
     }
