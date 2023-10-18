@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import SearchFilter from "../components/SearchFilter";
 import PersonForm from "../components/PersonForm";
 import PersonList from "../components/PersonList";
+import Notification from "../components/Notification";
 import personService from "./personService";
 
 const App = () => {
@@ -11,6 +11,13 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    personService.getAll().then((initialPerson) => {
+      setPersons(initialPerson);
+    });
+  }, []);
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -23,17 +30,6 @@ const App = () => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        setPersons(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -58,9 +54,20 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            setSuccessMessage(
+              `Number for ${updatedPerson.name} updated successfully.`
+            );
+            setTimeout(() => {
+              setSuccessMessage(null);
+            }, 5000);
           })
           .catch((error) => {
-            console.log(error);
+            setErrorMessage(
+              `Failed to update the number for ${existingPerson.name}. Please try again.`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           });
       }
     } else {
@@ -71,9 +78,16 @@ const App = () => {
           setPersons(persons.concat(createdPerson));
           setNewName("");
           setNewNumber("");
+          setSuccessMessage(`Person ${createdPerson.name} added successfully.`);
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
         })
         .catch((error) => {
-          console.log(error);
+          setErrorMessage(`Failed to add the person. Please try again.`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
         });
     }
   };
@@ -85,6 +99,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <SearchFilter
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
