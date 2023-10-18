@@ -1,48 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-const SearchFilter = ({ searchTerm, handleSearchChange }) => {
-  return (
-    <div>
-      Search Filter: <input value={searchTerm} onChange={handleSearchChange} />
-    </div>
-  );
-};
-
-const PersonForm = ({
-  newName,
-  newNumber,
-  handleNameChange,
-  handleNumberChange,
-  addPerson,
-}) => {
-  return (
-    <form onSubmit={addPerson}>
-      <div>
-        name: <input value={newName} onChange={handleNameChange} />
-      </div>
-      <div>
-        number: <input value={newNumber} onChange={handleNumberChange} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  );
-};
-
-const PersonList = ({ persons }) => {
-  return (
-    <div>
-      <h2>Numbers</h2>
-      {persons.map((person, index) => (
-        <p key={index}>
-          {person.name} {person.number}
-        </p>
-      ))}
-    </div>
-  );
-};
+import SearchFilter from "../components/SearchFilter";
+import PersonForm from "../components/PersonForm";
+import PersonList from "../components/PersonList";
+import personService from "./personService";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -75,25 +37,45 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (
-      !persons.some(
-        (person) => person.name.toLowerCase() === newName.toLowerCase()
-      )
-    ) {
+    const existingPerson = persons.find(
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
+    );
+
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already added to the phonebook. Replace the old number with a new one?`
+      );
+
+      if (confirmUpdate) {
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === updatedPerson.id ? updatedPerson : person
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } else {
       const newPerson = { name: newName, number: newNumber };
-      axios
-        .post("http://localhost:3001/persons", newPerson)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
+      personService
+        .create(newPerson)
+        .then((createdPerson) => {
+          setPersons(persons.concat(createdPerson));
+          setNewName("");
+          setNewNumber("");
         })
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      alert(`${newName} is already added to phonebook`);
     }
-    setNewName("");
-    setNewNumber("");
   };
 
   const filteredPersons = persons.filter((person) =>
@@ -115,7 +97,8 @@ const App = () => {
         handleNumberChange={handleNumberChange}
         addPerson={addPerson}
       />
-      <PersonList persons={filteredPersons} />
+      <h2>Numbers</h2>
+      <PersonList persons={filteredPersons} setPersons={setPersons} />
     </div>
   );
 };
