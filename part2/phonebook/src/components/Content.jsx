@@ -1,4 +1,4 @@
-import Person from "./Persons";
+import Person from "./Person";
 
 const Content = ({ persons, allPersons, deletePerson }) => {
   console.log(persons.length);
